@@ -58,6 +58,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <span className="text-gray-400 dark:text-zinc-600 text-sm hidden sm:block">personal bug tracker</span>
             </div>
             <div className="flex items-center gap-3">
+              <a
+                href="https://www.npmjs.com/package/bugit-cli"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden sm:flex items-center gap-1.5 text-xs font-mono text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+              >
+                <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">npm</span>
+                bugit-cli
+              </a>
               <ThemeToggle />
               {session ? (
                 <UserMenu email={session.user?.email ?? ""} />
