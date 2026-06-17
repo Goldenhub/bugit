@@ -1,33 +1,31 @@
-import type { Metadata } from 'next';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import ThemeToggle from './ThemeToggle';
-import Providers from './Providers';
-import UserMenu from './UserMenu';
-import './globals.css';
+import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import ThemeToggle from "./ThemeToggle";
+import Providers from "./Providers";
+import UserMenu from "./UserMenu";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://bugit-dev.vercel.app'),
+  metadataBase: new URL("https://bugit-dev.vercel.app"),
   title: {
-    default: 'BugIt — Terminal-first bug tracker',
-    template: '%s | BugIt',
+    default: "BugIt - Terminal-first bug tracker",
+    template: "%s | BugIt",
   },
-  description:
-    'Log bugs from your terminal without breaking your flow. Capture with one command, review and triage in the browser.',
-  keywords: ['bug tracker', 'cli', 'developer tools', 'terminal', 'issue tracker'],
-  authors: [{ name: 'Goldenhub', url: 'https://github.com/goldenhub' }],
+  description: "Log bugs from your terminal without breaking your flow. Capture with one command, review and triage in the browser.",
+  keywords: ["bug tracker", "cli", "developer tools", "terminal", "issue tracker"],
+  authors: [{ name: "Goldenhub", url: "https://github.com/goldenhub" }],
   openGraph: {
-    type: 'website',
-    url: 'https://bugit-dev.vercel.app',
-    siteName: 'BugIt',
-    title: 'BugIt — Terminal-first bug tracker',
-    description:
-      'Log bugs from your terminal without breaking your flow. Capture with one command, review in the browser.',
+    type: "website",
+    url: "https://bugit-dev.vercel.app",
+    siteName: "BugIt",
+    title: "BugIt - Terminal-first bug tracker",
+    description: "Log bugs from your terminal without breaking your flow. Capture with one command, review in the browser.",
   },
   twitter: {
-    card: 'summary',
-    title: 'BugIt — Terminal-first bug tracker',
-    description: 'Log bugs from your terminal without breaking your flow.',
+    card: "summary",
+    title: "BugIt - Terminal-first bug tracker",
+    description: "Log bugs from your terminal without breaking your flow.",
   },
   robots: { index: true, follow: true },
 };
@@ -38,13 +36,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
           (function() {
             var s = localStorage.getItem('theme');
             var d = s ? s === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
             if (d) document.documentElement.classList.add('dark');
           })();
-        `}} />
+        `,
+          }}
+        />
       </head>
       <body className="min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 antialiased transition-colors">
         <Providers>
@@ -58,7 +60,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <div className="flex items-center gap-3">
               <ThemeToggle />
               {session ? (
-                <UserMenu email={session.user?.email ?? ''} />
+                <UserMenu email={session.user?.email ?? ""} />
               ) : (
                 <a href="/auth/signin" className="text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1.5 rounded-lg transition-colors">
                   Sign in

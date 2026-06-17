@@ -4,11 +4,11 @@ A bug logging system for developers. Capture bugs from the terminal, review them
 
 ## Stack
 
-- **API** — NestJS 10, MongoDB/Mongoose, port 3001
-- **CLI** — Node.js ESM, published as `bugit-cli`, binary `bug`
-- **Web** — Next.js 14 App Router, Tailwind CSS, port 3000
-- **Auth** — NextAuth.js magic link (email) + CLI device flow
-- **Email** — Brevo API
+- **API** - NestJS 10, MongoDB/Mongoose, port 3001
+- **CLI** - Node.js ESM, published as `bugit-cli`, binary `bug`
+- **Web** - Next.js 14 App Router, Tailwind CSS, port 3000
+- **Auth** - NextAuth.js magic link (email) + CLI device flow
+- **Email** - Brevo API
 
 ---
 
@@ -40,19 +40,21 @@ cd api && npm run seed
 ### Environment variables
 
 **`api/.env`**
+
 ```
 MONGODB_URI=mongodb://localhost:27017/bugit
 PORT=3001
 ```
 
 **`web/.env.local`**
+
 ```
 MONGODB_URI=mongodb://localhost:27017/bugit
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=<openssl rand -base64 32>
 NEXT_PUBLIC_API_URL=http://localhost:3001
 
-# Brevo — without this, magic links are printed to the API terminal
+# Brevo - without this, magic links are printed to the API terminal
 BREVO_API_KEY=xkeysib-...
 EMAIL_FROM_ADDRESS=noreply@yourdomain.com
 EMAIL_FROM_NAME=BugIt
@@ -90,14 +92,14 @@ bug log "Login crashes on Safari" -p myapp -s critical -e prod
 
 Options:
 
-| Flag | Description |
-|------|-------------|
-| `-p, --project` | Project name |
-| `-s, --sev` | `low` \| `medium` \| `high` \| `critical` (default: `medium`) |
-| `-e, --env` | Environment: `local` \| `staging` \| `prod` |
-| `-d, --desc` | Description / steps to reproduce |
-| `-n, --notes` | Root cause or fix notes |
-| `-t, --tags` | Comma-separated tags |
+| Flag            | Description                                                   |
+| --------------- | ------------------------------------------------------------- |
+| `-p, --project` | Project name                                                  |
+| `-s, --sev`     | `low` \| `medium` \| `high` \| `critical` (default: `medium`) |
+| `-e, --env`     | Environment: `local` \| `staging` \| `prod`                   |
+| `-d, --desc`    | Description / steps to reproduce                              |
+| `-n, --notes`   | Root cause or fix notes                                       |
+| `-t, --tags`    | Comma-separated tags                                          |
 
 ### List bugs
 
@@ -145,7 +147,7 @@ Open [http://localhost:3000](http://localhost:3000) after `npm run dev`.
 - Stats bar: total, open, in-progress, resolved counts
 - Filter by project, severity, status, or full-text search
 - Inline status and severity updates on the bug detail page
-- Notes textarea — saves on blur
+- Notes textarea - saves on blur
 - Comments section
 - Dark / light theme toggle
 
@@ -153,13 +155,13 @@ Open [http://localhost:3000](http://localhost:3000) after `npm run dev`.
 
 ## Deployment
 
-### MongoDB — Atlas
+### MongoDB - Atlas
 
 1. Create a free cluster at [mongodb.com/atlas](https://mongodb.com/atlas)
 2. Get the connection string: `mongodb+srv://user:pass@cluster.mongodb.net/bugit`
 3. Use this as `MONGODB_URI` in both the API host and Vercel
 
-### API — Railway
+### API - Railway
 
 1. Push the repo to GitHub
 2. New project on [railway.app](https://railway.app) → Deploy from GitHub → select the `api/` service
@@ -170,7 +172,7 @@ Open [http://localhost:3000](http://localhost:3000) after `npm run dev`.
    ```
 4. Note the deployed URL (e.g. `https://bugit-api.railway.app`)
 
-### Web — Vercel
+### Web - Vercel
 
 1. Import the repo on [vercel.com](https://vercel.com)
 2. Set root directory to `web`
@@ -185,22 +187,22 @@ Open [http://localhost:3000](http://localhost:3000) after `npm run dev`.
    EMAIL_FROM_NAME=BugIt
    ```
 
-### API — update CORS
+### API - update CORS
 
 After deploying, update `api/src/main.ts` with your Vercel domain:
 
 ```ts
 app.enableCors({
-  origin: ['https://your-app.vercel.app', 'http://localhost:3000'],
+  origin: ["https://your-app.vercel.app", "http://localhost:3000"],
 });
 ```
 
-### CLI — update API URL
+### CLI - update API URL
 
 Before publishing to npm, set the production URL in `cli/src/config.js`:
 
 ```js
-export const API_URL = process.env.BUGIT_API_URL ?? 'https://bugit-api.railway.app';
+export const API_URL = process.env.BUGIT_API_URL ?? "https://bugit-api.railway.app";
 ```
 
 Then publish:

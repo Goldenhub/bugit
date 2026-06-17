@@ -27,7 +27,7 @@ export async function apiFetch(path, options = {}) {
     clearTimeout(timer);
 
     if (res.status === 401) {
-      throw new ApiError('Not authenticated — run: bug login', 401);
+      throw new ApiError('Not authenticated - run: bug login', 401);
     }
     if (!res.ok) {
       let msg = `HTTP ${res.status}`;
@@ -39,7 +39,7 @@ export async function apiFetch(path, options = {}) {
   } catch (err) {
     clearTimeout(timer);
     if (err.name === 'AbortError') {
-      throw new ApiError('API unreachable — is the BugIt server running?', 0);
+      throw new ApiError('API unreachable - is the BugIt server running?', 0);
     }
     if (err instanceof ApiError) throw err;
     throw new ApiError(`Network error: ${err.message}`, 0);

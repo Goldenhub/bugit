@@ -65,12 +65,12 @@ export function printBugDetail(bug, comments = []) {
   console.log(chalk.bold(bug.title));
   console.log(line);
   console.log(`${chalk.dim('ID')}          ${shortId(bug._id)} (${bug._id})`);
-  console.log(`${chalk.dim('Project')}     ${bug.project || '—'}`);
+  console.log(`${chalk.dim('Project')}     ${bug.project || '-'}`);
   console.log(`${chalk.dim('Severity')}    ${colorSev(bug.severity)}`);
   console.log(`${chalk.dim('Status')}      ${colorStatus(bug.status)}`);
-  console.log(`${chalk.dim('Environment')} ${bug.environment || '—'}`);
+  console.log(`${chalk.dim('Environment')} ${bug.environment || '-'}`);
   console.log(`${chalk.dim('Source')}      ${bug.source}`);
-  console.log(`${chalk.dim('Tags')}        ${bug.tags?.join(', ') || '—'}`);
+  console.log(`${chalk.dim('Tags')}        ${bug.tags?.join(', ') || '-'}`);
   console.log(
     `${chalk.dim('Created')}     ${new Date(bug.createdAt).toLocaleString()}`,
   );

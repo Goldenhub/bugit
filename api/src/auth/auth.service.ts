@@ -1,17 +1,17 @@
-import { Injectable, NotFoundException, GoneException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { randomBytes, createHash } from 'crypto';
-import { ApiToken, ApiTokenDocument } from './api-token.schema';
-import { CliSession, CliSessionDocument } from './cli-session.schema';
-import { NextAuthUser, NextAuthUserDocument } from './nextauth-user.schema';
+import { Injectable, NotFoundException, GoneException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { randomBytes, createHash } from "crypto";
+import { ApiToken, ApiTokenDocument } from "./api-token.schema";
+import { CliSession, CliSessionDocument } from "./cli-session.schema";
+import { NextAuthUser, NextAuthUserDocument } from "./nextauth-user.schema";
 
 function sha256(value: string) {
-  return createHash('sha256').update(value).digest('hex');
+  return createHash("sha256").update(value).digest("hex");
 }
 
 function generateToken() {
-  return randomBytes(32).toString('hex');
+  return randomBytes(32).toString("hex");
 }
 
 @Injectable()
@@ -37,37 +37,35 @@ export class AuthService {
     return { code, url: `${baseUrl}/auth/cli?code=${code}` };
   }
 
-  async pollCliSession(
-    code: string,
-  ): Promise<{ status: string; token?: string }> {
+  async pollCliSession(code: string): Promise<{ status: string; token?: string }> {
     const session = await this.cliSessionModel.findOne({
       codeHash: sha256(code),
     });
-    if (!session) throw new NotFoundException('Session not found or expired');
+    if (!session) throw new NotFoundException("Session not found or expired");
 
-    if (session.status === 'pending') return { status: 'pending' };
+    if (session.status === "pending") return { status: "pending" };
 
-    // Approved — return token and delete the session (single-use)
+    // Approved - return token and delete the session (single-use)
     const token = session.apiToken;
     await session.deleteOne();
-    return { status: 'approved', token };
+    return { status: "approved", token };
   }
 
   async getMe(userId: string): Promise<{ email: string }> {
-    const user = await this.userModel.findById(userId).select('email').lean();
-    if (!user) throw new NotFoundException('User not found');
+    const user = await this.userModel.findById(userId).select("email").lean();
+    if (!user) throw new NotFoundException("User not found");
     return { email: user.email };
   }
 
   async approveCliSession(code: string, userId: string): Promise<void> {
     const session = await this.cliSessionModel.findOne({
       codeHash: sha256(code),
-      status: 'pending',
+      status: "pending",
     });
-    if (!session) throw new GoneException('Session not found or already used');
+    if (!session) throw new GoneException("Session not found or already used");
 
-    const raw = await this.createApiToken(userId, 'cli');
-    session.status = 'approved';
+    const raw = await this.createApiToken(userId, "cli");
+    session.status = "approved";
     session.userId = userId;
     session.apiToken = raw;
     await session.save();

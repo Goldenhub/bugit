@@ -38,5 +38,5 @@ Thumbs.db
 *.swp
 *.swo
 
-# CLI local token (users' own — not committed)
+# CLI local token (users' own - not committed)
 .buglogrc

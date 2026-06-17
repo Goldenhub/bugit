@@ -16,7 +16,7 @@ function handleError(err) {
   process.exit(1);
 }
 
-program.name('bug').description('BugIt CLI — log and review bugs fast').version('1.0.0');
+program.name('bug').description('BugIt CLI - log and review bugs fast').version('1.0.0');
 
 // bug log
 program
@@ -44,7 +44,7 @@ program
       };
       const bug = await apiFetch('/bugs', { method: 'POST', body: JSON.stringify(body) });
       spinner.succeed(
-        `Bug logged ${chalk.dim(shortId(bug._id))} — ${colorSev(bug.severity)} ${chalk.bold(bug.title)}`,
+        `Bug logged ${chalk.dim(shortId(bug._id))} - ${colorSev(bug.severity)} ${chalk.bold(bug.title)}`,
       );
     } catch (err) {
       spinner.fail();
@@ -126,7 +126,7 @@ program
       }
       const bug = await apiFetch(`/bugs/${id}`, { method: 'PATCH', body: JSON.stringify(body) });
       spinner.succeed(
-        `Updated ${chalk.dim(shortId(bug._id))} — status: ${colorStatus(bug.status)}, sev: ${colorSev(bug.severity)}`,
+        `Updated ${chalk.dim(shortId(bug._id))} - status: ${colorStatus(bug.status)}, sev: ${colorSev(bug.severity)}`,
       );
     } catch (err) {
       spinner.fail();
@@ -192,7 +192,7 @@ program
       };
       const bug = await apiFetch('/bugs', { method: 'POST', body: JSON.stringify(body) });
       spinner.succeed(
-        `Piped bug logged ${chalk.dim(shortId(bug._id))} — ${colorSev(bug.severity)} ${chalk.bold(bug.title)}`,
+        `Piped bug logged ${chalk.dim(shortId(bug._id))} - ${colorSev(bug.severity)} ${chalk.bold(bug.title)}`,
       );
     } catch (err) {
       spinner.fail();
@@ -200,7 +200,7 @@ program
     }
   });
 
-// bug login — device flow
+// bug login - device flow
 program
   .command('login')
   .description('Authenticate via browser')
