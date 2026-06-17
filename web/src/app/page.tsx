@@ -83,14 +83,11 @@ export default async function LandingPage() {
         <div className="flex flex-col lg:flex-row lg:items-center gap-14">
           {/* left: copy */}
           <div className="lg:w-[45%] shrink-0">
-            <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-4 tracking-wide uppercase">
-              Developer tool
-            </p>
             <h1 className="text-6xl sm:text-7xl font-extrabold tracking-tight leading-[1.05] text-gray-900 dark:text-white">
-              Bug tracker<br />for your<br />terminal.
+              Log it now.<br />Fix it later.
             </h1>
             <p className="mt-7 text-xl text-gray-500 dark:text-zinc-400 leading-relaxed">
-              Log bugs without leaving the terminal. One command, zero friction. Review in the browser when you&apos;re ready.
+              BugIt is a simple bug logger for developers. Spot something broken, log it in seconds from the terminal, come back when you know the fix.
             </p>
             <div className="mt-8 flex items-center gap-3 flex-wrap">
               {session ? (
@@ -149,10 +146,10 @@ export default async function LandingPage() {
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
-              What you get
+              Nothing fancy. Just useful.
             </h2>
             <p className="text-gray-500 dark:text-zinc-400 sm:text-right max-w-xs">
-              Built lean. Every feature earns its place.
+              Built because Jira is overkill and sticky notes don&apos;t have severity levels.
             </p>
           </div>
 
@@ -160,33 +157,33 @@ export default async function LandingPage() {
             {[
               {
                 n: '01',
-                title: 'One-command capture',
-                desc: 'Log a bug with a single command. Pipe build errors or stack traces directly. Never open a browser to file an issue.',
+                title: 'Log from the terminal',
+                desc: 'One command. You\'re back to coding in five seconds. No browser, no login flow, no ticket form to fill out.',
               },
               {
                 n: '02',
-                title: 'Web dashboard',
-                desc: 'Filter by project, severity, and status. Full detail view with inline editing, notes, and comments.',
+                title: 'Come back to it',
+                desc: 'When you find the root cause or the fix, open the dashboard, add your notes, and close it out.',
               },
               {
                 n: '03',
-                title: 'Magic link auth',
-                desc: 'No passwords. Sign in with an email link. CLI and browser share the same session.',
+                title: 'Works for your team too',
+                desc: 'Each person has their own account and their own bugs. Share the tool, not the clutter.',
               },
               {
                 n: '04',
-                title: 'Rich metadata',
-                desc: 'Severity, project, environment, tags, description, notes. Everything searchable and filterable.',
+                title: 'Pipe build failures in',
+                desc: 'npm run build 2>&1 | bug pipe "Build broke". Your CI output becomes a bug in one line.',
               },
               {
                 n: '05',
-                title: 'Stdin piping',
-                desc: 'Pipe any output into a bug. Great for CI failures, error logs, and build output.',
+                title: 'Tag what matters',
+                desc: 'Severity, project, environment, tags. Enough structure to filter later without becoming a second job.',
               },
               {
                 n: '06',
-                title: 'Dark mode',
-                desc: 'Fully themed. Follows your system preference and remembers your choice between sessions.',
+                title: 'No friction to sign in',
+                desc: 'Email link, no password. The CLI authenticates through your browser once and stays logged in.',
               },
             ].map((f) => (
               <div key={f.n} className="border-t-2 border-gray-900 dark:border-zinc-100 pt-5 space-y-2">
@@ -203,7 +200,7 @@ export default async function LandingPage() {
       <section className="bg-gray-50 dark:bg-zinc-900 border-y border-gray-100 dark:border-zinc-800 px-6 py-20">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight mb-12">
-            Up in two minutes
+            Start in two minutes
           </h2>
           <ol className="space-y-10">
             {[
@@ -259,14 +256,14 @@ export default async function LandingPage() {
         <section className="bg-zinc-900 dark:bg-zinc-950 border-b border-zinc-800 px-6 py-20 text-center">
           <div className="max-w-xl mx-auto space-y-5">
             <h2 className="text-4xl font-bold text-white tracking-tight">
-              Never lose track of a bug again.
+              Give it a try.
             </h2>
-            <p className="text-zinc-400 text-lg">Free. No credit card. Takes two minutes.</p>
+            <p className="text-zinc-400 text-lg">Free. No card. If it doesn&apos;t fit your workflow, uninstall takes one command too.</p>
             <Link
               href="/auth/signin"
               className="inline-block rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-7 py-3 text-sm transition-colors"
             >
-              Get started free →
+              Get started →
             </Link>
           </div>
         </section>
