@@ -2,9 +2,20 @@
   "name": "bugit-cli",
   "version": "1.0.0",
   "description": "BugIt CLI — capture bugs from your terminal",
+  "author": "Golden Azubuike <goldenazubuike@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://bugit-dev.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/goldenazubuike/bugit"
+  },
+  "keywords": ["bug", "tracker", "cli", "developer-tools", "debugging"],
   "bin": {
     "bug": "./src/index.js"
   },
+  "files": [
+    "src/"
+  ],
   "scripts": {
     "start": "node src/index.js"
   },

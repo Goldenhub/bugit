@@ -2,8 +2,7 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 
-// Change this before publishing to npm
-export const API_URL = process.env.BUGIT_API_URL ?? 'http://localhost:3001';
+export const API_URL = process.env.BUGIT_API_URL ?? 'https://bugit-j70c.onrender.com';
 
 const CONFIG_PATH = join(homedir(), '.buglogrc');
 
