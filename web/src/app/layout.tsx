@@ -7,8 +7,29 @@ import UserMenu from './UserMenu';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'BugIt',
-  description: 'Personal bug logging dashboard',
+  metadataBase: new URL('https://bugit-dev.vercel.app'),
+  title: {
+    default: 'BugIt — Terminal-first bug tracker',
+    template: '%s | BugIt',
+  },
+  description:
+    'Log bugs from your terminal without breaking your flow. Capture with one command, review and triage in the browser.',
+  keywords: ['bug tracker', 'cli', 'developer tools', 'terminal', 'issue tracker'],
+  authors: [{ name: 'Goldenhub', url: 'https://github.com/goldenhub' }],
+  openGraph: {
+    type: 'website',
+    url: 'https://bugit-dev.vercel.app',
+    siteName: 'BugIt',
+    title: 'BugIt — Terminal-first bug tracker',
+    description:
+      'Log bugs from your terminal without breaking your flow. Capture with one command, review in the browser.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'BugIt — Terminal-first bug tracker',
+    description: 'Log bugs from your terminal without breaking your flow.',
+  },
+  robots: { index: true, follow: true },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
