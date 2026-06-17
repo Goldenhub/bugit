@@ -36,10 +36,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </div>
             <div className="flex items-center gap-3">
               <ThemeToggle />
-              {session && <UserMenu email={session.user?.email ?? ''} />}
+              {session ? (
+                <UserMenu email={session.user?.email ?? ''} />
+              ) : (
+                <a href="/auth/signin" className="text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1.5 rounded-lg transition-colors">
+                  Sign in
+                </a>
+              )}
             </div>
           </nav>
-          <main className="max-w-6xl mx-auto px-6 py-8">{children}</main>
+          <main>{children}</main>
         </Providers>
       </body>
     </html>
