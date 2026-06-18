@@ -10,6 +10,7 @@ import { IsString, MinLength } from 'class-validator';
 import { PinoLoggerService } from '../pino-logger.service';
 import { AppException } from '../exceptions/app-exception';
 import { ErrorCodes } from '../exceptions/error-codes';
+import { resolveBugId } from '../common/resolve-bug-id';
 
 export class CreateCommentDto {
   @IsString()
@@ -27,12 +28,13 @@ export class CommentsService {
     this.logger.setContext(CommentsService.name);
   }
 
-  private async assertBugOwner(bugId: string, userId: string) {
-    const bug = await this.bugModel.findOne({
-      _id: new Types.ObjectId(bugId),
-      userId,
-      deletedAt: null,
-    });
+  private async resolveBug(bugId: string, userId: string): Promise<BugDocument> {
+    const idFilter = resolveBugId(bugId);
+    if (!idFilter) {
+      this.logger.warn(`Invalid bug ID for comment bugId=${bugId} user=${userId}`);
+      throw new AppException('Invalid bug ID', HttpStatus.BAD_REQUEST, ErrorCodes.BUG_INVALID_ID);
+    }
+    const bug = await this.bugModel.findOne({ ...idFilter, userId, deletedAt: null });
     if (!bug) {
       this.logger.warn(`Comment ownership check failed bugId=${bugId} user=${userId}`);
       throw new AppException('Bug not found', HttpStatus.NOT_FOUND, ErrorCodes.COMMENT_BUG_NOT_FOUND);
@@ -41,16 +43,16 @@ export class CommentsService {
   }
 
   async create(bugId: string, body: string, userId: string): Promise<CommentDocument> {
-    await this.assertBugOwner(bugId, userId);
-    const comment = await this.commentModel.create({ bugId: new Types.ObjectId(bugId), body });
+    const bug = await this.resolveBug(bugId, userId);
+    const comment = await this.commentModel.create({ bugId: bug._id, body });
     this.logger.log(`Comment created id=${comment._id} bugId=${bugId} user=${userId}`);
     return comment;
   }
 
   async findByBug(bugId: string, userId: string): Promise<CommentDocument[]> {
-    await this.assertBugOwner(bugId, userId);
+    const bug = await this.resolveBug(bugId, userId);
     const comments = await this.commentModel
-      .find({ bugId: new Types.ObjectId(bugId) })
+      .find({ bugId: bug._id })
       .sort({ createdAt: 1 })
       .lean() as unknown as CommentDocument[];
     this.logger.debug(`Comments listed bugId=${bugId} count=${comments.length}`);

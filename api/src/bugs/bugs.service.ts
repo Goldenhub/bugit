@@ -3,13 +3,14 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, isValidObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { Bug, BugDocument } from './bugs.schema';
 import { CreateBugDto } from './dto/create-bug.dto';
 import { UpdateBugDto } from './dto/update-bug.dto';
 import { PinoLoggerService } from '../pino-logger.service';
 import { AppException } from '../exceptions/app-exception';
 import { ErrorCodes } from '../exceptions/error-codes';
+import { resolveBugId } from '../common/resolve-bug-id';
 
 export interface BugListQuery {
   project?: string;
@@ -68,12 +69,13 @@ export class BugsService {
     return { bugs, total, page, limit };
   }
 
-  async findOne(id: string, userId: string): Promise<BugDocument> {
-    if (!isValidObjectId(id)) {
-      this.logger.warn(`Invalid bug ID requested id=${id} user=${userId}`);
+  private async findBug(id: string, userId: string): Promise<BugDocument> {
+    const idFilter = resolveBugId(id);
+    if (!idFilter) {
+      this.logger.warn(`Invalid bug ID id=${id} user=${userId}`);
       throw new AppException('Invalid bug ID', HttpStatus.BAD_REQUEST, ErrorCodes.BUG_INVALID_ID);
     }
-    const bug = await this.bugModel.findOne({ _id: id, userId, deletedAt: null });
+    const bug = await this.bugModel.findOne({ ...idFilter, userId, deletedAt: null });
     if (!bug) {
       this.logger.warn(`Bug not found id=${id} user=${userId}`);
       throw new AppException(`Bug ${id} not found`, HttpStatus.NOT_FOUND, ErrorCodes.BUG_NOT_FOUND);
@@ -81,31 +83,29 @@ export class BugsService {
     return bug;
   }
 
+  async findOne(id: string, userId: string): Promise<BugDocument> {
+    return this.findBug(id, userId);
+  }
+
   async update(id: string, dto: UpdateBugDto, userId: string): Promise<BugDocument> {
-    if (!isValidObjectId(id)) {
-      this.logger.warn(`Invalid bug ID for update id=${id} user=${userId}`);
-      throw new AppException('Invalid bug ID', HttpStatus.BAD_REQUEST, ErrorCodes.BUG_INVALID_ID);
-    }
-    const bug = await this.bugModel.findOneAndUpdate(
-      { _id: id, userId, deletedAt: null },
+    const bug = await this.findBug(id, userId);
+    const updated = await this.bugModel.findOneAndUpdate(
+      { _id: bug._id, userId, deletedAt: null },
       dto,
       { new: true },
     );
-    if (!bug) {
+    if (!updated) {
       this.logger.warn(`Bug not found for update id=${id} user=${userId}`);
       throw new AppException(`Bug ${id} not found`, HttpStatus.NOT_FOUND, ErrorCodes.BUG_NOT_FOUND);
     }
     this.logger.log(`Bug updated id=${id} user=${userId}`);
-    return bug;
+    return updated;
   }
 
   async softDelete(id: string, userId: string): Promise<void> {
-    if (!isValidObjectId(id)) {
-      this.logger.warn(`Invalid bug ID for delete id=${id} user=${userId}`);
-      throw new AppException('Invalid bug ID', HttpStatus.BAD_REQUEST, ErrorCodes.BUG_INVALID_ID);
-    }
+    const bug = await this.findBug(id, userId);
     const result = await this.bugModel.updateOne(
-      { _id: id, userId, deletedAt: null },
+      { _id: bug._id, userId, deletedAt: null },
       { deletedAt: new Date() },
     );
     if (result.matchedCount === 0) {
