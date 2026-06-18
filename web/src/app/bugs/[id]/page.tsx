@@ -37,7 +37,7 @@ export default async function BugDetailPage({ params }: { params: { id: string }
   const { bug, comments } = result;
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="max-w-3xl mx-auto px-6 py-10 space-y-6">
       <div className="flex items-center justify-between">
         <Link href="/bugs" className="text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white text-sm transition-colors">
           ← Back
