@@ -9,6 +9,9 @@ A bug logging system for developers. Capture bugs from the terminal, review them
 - **Web** - Next.js 14 App Router, Tailwind CSS, port 3000
 - **Auth** - NextAuth.js magic link (email) + CLI device flow
 - **Email** - Brevo API
+- **Logging** - Pino (structured JSON) + Axiom transport
+- **Error tracking** - Sentry via `@sentry/nestjs`
+- **Error codes** - Typed error codes with unique per-error IDs for traceability
 
 ---
 
@@ -44,6 +47,14 @@ cd api && npm run seed
 ```
 MONGODB_URI=mongodb://localhost:27017/bugit
 PORT=3001
+
+# Axiom (optional — structured logging)
+# AXIOM_TOKEN=axo_...
+# AXIOM_DATASET=bugit
+
+# Sentry (optional — error tracking)
+# SENTRY_DSN=https://key@o.ingest.sentry.io/project
+# SENTRY_TRACES_SAMPLE_RATE=0.1
 ```
 
 **`web/.env.local`**
@@ -150,6 +161,51 @@ Open [http://localhost:3000](http://localhost:3000) after `npm run dev`.
 - Notes textarea - saves on blur
 - Comments section
 - Dark / light theme toggle
+
+---
+
+## API: Error Handling
+
+Every error thrown by the API returns a consistent JSON shape:
+
+```json
+{
+  "errorId": "84597550-b9be-4166-a602-d2972668654b",
+  "code": "BUG_NOT_FOUND",
+  "message": "Bug abc123 not found",
+  "statusCode": 404
+}
+```
+
+| Field | Description |
+|---|---|
+| `errorId` | Unique UUID v4 generated per error instance. Cross-references the Axiom log entry and the Sentry event (`extra.errorId`). |
+| `code` | Typed error code for programmatic handling. |
+| `message` | Human-readable description. |
+| `statusCode` | HTTP status code. |
+
+### Error codes
+
+| Code | HTTP Status | When |
+|---|---|---|
+| `AUTH_TOKEN_MISSING` | 401 | No `Authorization` header |
+| `AUTH_TOKEN_INVALID` | 401 | Bearer token doesn't match a stored hash |
+| `AUTH_SESSION_NOT_FOUND` | 404 | CLI session code invalid or expired |
+| `AUTH_SESSION_EXPIRED` | 410 | CLI session already consumed |
+| `AUTH_USER_NOT_FOUND` | 404 | NextAuth user missing |
+| `BUG_NOT_FOUND` | 404 | Bug ID doesn't exist or was deleted |
+| `BUG_INVALID_ID` | 400 | Bug ID is not a valid ObjectId |
+| `COMMENT_BUG_NOT_FOUND` | 404 | Bug referenced by a comment doesn't exist |
+| `VALIDATION_FAILED` | 400 | Request body failed class-validator checks |
+| `INTERNAL_ERROR` | 500 | Unhandled exception |
+
+### Sentry test endpoint
+
+```bash
+curl http://localhost:3001/debug-sentry
+```
+
+This throws an error to verify Sentry is capturing events. Check the Sentry dashboard for a new issue. The event will include `errorId` (under **Extra**) and `errorCode` (under **Tags**) for cross-referencing with Axiom logs.
 
 ---
 

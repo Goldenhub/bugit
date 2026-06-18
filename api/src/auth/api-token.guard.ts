@@ -2,7 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  UnauthorizedException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
@@ -10,13 +10,19 @@ import { Model } from 'mongoose';
 import { createHash } from 'crypto';
 import { ApiToken, ApiTokenDocument } from './api-token.schema';
 import { IS_PUBLIC_KEY } from './public.decorator';
+import { PinoLoggerService } from '../pino-logger.service';
+import { AppException } from '../exceptions/app-exception';
+import { ErrorCodes } from '../exceptions/error-codes';
 
 @Injectable()
 export class ApiTokenGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     @InjectModel(ApiToken.name) private apiTokenModel: Model<ApiTokenDocument>,
-  ) {}
+    private readonly logger: PinoLoggerService,
+  ) {
+    this.logger.setContext(ApiTokenGuard.name);
+  }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -31,7 +37,10 @@ export class ApiTokenGuard implements CanActivate {
     }>();
 
     const header = req.headers.authorization;
-    if (!header?.startsWith('Bearer ')) throw new UnauthorizedException();
+    if (!header?.startsWith('Bearer ')) {
+      this.logger.warn('Missing or malformed Authorization header');
+      throw new AppException('Missing or invalid authorization header', HttpStatus.UNAUTHORIZED, ErrorCodes.AUTH_TOKEN_MISSING);
+    }
 
     const raw = header.slice(7);
     const hash = createHash('sha256').update(raw).digest('hex');
@@ -40,7 +49,10 @@ export class ApiTokenGuard implements CanActivate {
       { tokenHash: hash },
       { lastUsedAt: new Date() },
     );
-    if (!token) throw new UnauthorizedException();
+    if (!token) {
+      this.logger.warn('Invalid API token presented');
+      throw new AppException('Invalid API token', HttpStatus.UNAUTHORIZED, ErrorCodes.AUTH_TOKEN_INVALID);
+    }
 
     req.userId = token.userId;
     return true;

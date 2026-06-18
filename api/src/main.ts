@@ -1,9 +1,13 @@
+import './instrument';
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { PinoLoggerService } from './pino-logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const logger = new PinoLoggerService();
+  const app = await NestFactory.create(AppModule, { logger });
 
   const allowedOrigins = [
     'http://localhost:3000',
@@ -25,7 +29,7 @@ async function bootstrap() {
 
   const port = process.env.PORT ?? 3001;
   await app.listen(port);
-  console.log(`BugIt API running on port ${port}`);
+  logger.log(`BugIt API running on port ${port}`);
 }
 
 bootstrap();

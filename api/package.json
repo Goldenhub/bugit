@@ -10,13 +10,17 @@
     "seed": "ts-node -r tsconfig-paths/register src/seed.ts"
   },
   "dependencies": {
+    "@axiomhq/pino": "^1.7.0",
     "@nestjs/common": "^10.3.0",
     "@nestjs/core": "^10.3.0",
     "@nestjs/mongoose": "^10.0.4",
     "@nestjs/platform-express": "^10.3.0",
+    "@sentry/nestjs": "^10.58.0",
+    "@sentry/node": "^10.58.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "mongoose": "^8.1.1",
+    "pino": "^10.3.1",
     "reflect-metadata": "^0.2.1",
     "rxjs": "^7.8.1"
   },
