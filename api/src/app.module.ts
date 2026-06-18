@@ -5,9 +5,9 @@ import { SentryModule } from '@sentry/nestjs/setup';
 import { BugsModule } from './bugs/bugs.module';
 import { CommentsModule } from './comments/comments.module';
 import { MetaModule } from './meta/meta.module';
+import { LoggerModule } from './logger.module';
 import { AuthModule } from './auth/auth.module';
 import { ApiTokenGuard } from './auth/api-token.guard';
-import { PinoLoggerService } from './pino-logger.service';
 import { AppExceptionFilter } from './exceptions/exception.filter';
 import { HealthController } from './health.controller';
 
@@ -18,13 +18,13 @@ import { HealthController } from './health.controller';
       process.env.MONGODB_URI ?? 'mongodb://localhost:27017/bugit',
     ),
     SentryModule.forRoot(),
+    LoggerModule,
     AuthModule,
     BugsModule,
     CommentsModule,
     MetaModule,
   ],
   providers: [
-    PinoLoggerService,
     {
       provide: APP_GUARD,
       useClass: ApiTokenGuard,
@@ -34,6 +34,5 @@ import { HealthController } from './health.controller';
       useClass: AppExceptionFilter,
     },
   ],
-  exports: [PinoLoggerService],
 })
 export class AppModule {}
