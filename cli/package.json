@@ -1,6 +1,6 @@
 {
   "name": "bugit-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "BugIt CLI - capture bugs from your terminal",
   "author": "Golden Azubuike <goldenazubuike@gmail.com>",
   "license": "MIT",
