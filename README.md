@@ -96,7 +96,7 @@ bug whoami    # show auth status
 ### Log a bug
 
 ```bash
-bug log "BullMQ job silently drops on 429" -p heirmpire -s high -t nestjs,bullmq
+bug log "BullMQ job silently drops on 429" -p <project-name> -s high -t nestjs,bullmq
 bug log "Prisma decimal returns string" -p billkit -s medium --desc "findOneAndUpdate with inc"
 bug log "Login crashes on Safari" -p myapp -s critical -e prod
 ```
@@ -117,7 +117,7 @@ Options:
 ```bash
 bug list                       # all bugs, last 20
 bug list --status open
-bug list -p heirmpire --sev high
+bug list -p <project-name>> --sev high
 bug list --limit 50
 ```
 
@@ -146,7 +146,7 @@ bug wontfix <id>
 
 ```bash
 cat error.log | bug pipe "Build exploded" -p billkit -s high
-npm run build 2>&1 | bug pipe "Build failed" -p heirmpire
+npm run build 2>&1 | bug pipe "Build failed" -p <project-name>
 ```
 
 ---
@@ -177,27 +177,27 @@ Every error thrown by the API returns a consistent JSON shape:
 }
 ```
 
-| Field | Description |
-|---|---|
-| `errorId` | Unique UUID v4 generated per error instance. Cross-references the Axiom log entry and the Sentry event (`extra.errorId`). |
-| `code` | Typed error code for programmatic handling. |
-| `message` | Human-readable description. |
-| `statusCode` | HTTP status code. |
+| Field        | Description                                                                                                               |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `errorId`    | Unique UUID v4 generated per error instance. Cross-references the Axiom log entry and the Sentry event (`extra.errorId`). |
+| `code`       | Typed error code for programmatic handling.                                                                               |
+| `message`    | Human-readable description.                                                                                               |
+| `statusCode` | HTTP status code.                                                                                                         |
 
 ### Error codes
 
-| Code | HTTP Status | When |
-|---|---|---|
-| `AUTH_TOKEN_MISSING` | 401 | No `Authorization` header |
-| `AUTH_TOKEN_INVALID` | 401 | Bearer token doesn't match a stored hash |
-| `AUTH_SESSION_NOT_FOUND` | 404 | CLI session code invalid or expired |
-| `AUTH_SESSION_EXPIRED` | 410 | CLI session already consumed |
-| `AUTH_USER_NOT_FOUND` | 404 | NextAuth user missing |
-| `BUG_NOT_FOUND` | 404 | Bug ID doesn't exist or was deleted |
-| `BUG_INVALID_ID` | 400 | Bug ID is not a valid ObjectId |
-| `COMMENT_BUG_NOT_FOUND` | 404 | Bug referenced by a comment doesn't exist |
-| `VALIDATION_FAILED` | 400 | Request body failed class-validator checks |
-| `INTERNAL_ERROR` | 500 | Unhandled exception |
+| Code                     | HTTP Status | When                                       |
+| ------------------------ | ----------- | ------------------------------------------ |
+| `AUTH_TOKEN_MISSING`     | 401         | No `Authorization` header                  |
+| `AUTH_TOKEN_INVALID`     | 401         | Bearer token doesn't match a stored hash   |
+| `AUTH_SESSION_NOT_FOUND` | 404         | CLI session code invalid or expired        |
+| `AUTH_SESSION_EXPIRED`   | 410         | CLI session already consumed               |
+| `AUTH_USER_NOT_FOUND`    | 404         | NextAuth user missing                      |
+| `BUG_NOT_FOUND`          | 404         | Bug ID doesn't exist or was deleted        |
+| `BUG_INVALID_ID`         | 400         | Bug ID is not a valid ObjectId             |
+| `COMMENT_BUG_NOT_FOUND`  | 404         | Bug referenced by a comment doesn't exist  |
+| `VALIDATION_FAILED`      | 400         | Request body failed class-validator checks |
+| `INTERNAL_ERROR`         | 500         | Unhandled exception                        |
 
 ### Sentry test endpoint
 
