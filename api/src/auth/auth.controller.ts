@@ -28,9 +28,10 @@ export class AuthController {
     @Headers('origin') origin: string,
     @Headers('referer') referer: string,
   ) {
+    const defaultWebUrl = process.env.WEB_APP_URL ?? 'http://localhost:3000';
     const base =
       origin ??
-      (referer ? new URL(referer).origin : 'http://localhost:3000');
+      (referer ? new URL(referer).origin : defaultWebUrl);
     return this.authService.initCliSession(base);
   }
 

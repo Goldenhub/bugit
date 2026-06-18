@@ -55,6 +55,9 @@ PORT=3001
 # Sentry (optional — error tracking)
 # SENTRY_DSN=https://key@o.ingest.sentry.io/project
 # SENTRY_TRACES_SAMPLE_RATE=0.1
+
+# Web app URL (used for CLI auth redirect)
+# WEB_APP_URL=http://localhost:3000
 ```
 
 **`web/.env.local`**
@@ -225,6 +228,7 @@ This throws an error to verify Sentry is capturing events. Check the Sentry dash
    ```
    MONGODB_URI=mongodb+srv://...
    PORT=3001
+   WEB_APP_URL=https://your-app.vercel.app
    ```
 4. Note the deployed URL (e.g. `https://bugit-api.railway.app`)
 
